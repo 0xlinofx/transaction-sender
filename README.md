@@ -1,6 +1,6 @@
 # Download the script
 ```bash
-wget https://raw.githubusercontent.com/yourusername/transaction-sender/main/sendTransactions.js
+wget https://raw.githubusercontent.com/0xlinofx/transaction-sender/main/sendTransactions.js
 ```
 
 # Download package.json
