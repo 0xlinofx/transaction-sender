@@ -1,17 +1,22 @@
+#!/usr/bin/env node
+
 import inquirer from 'inquirer';
 import { ethers } from 'ethers';
 
-// Prompt user for input
 async function getUserInput() {
-  return inquirer.prompt([
+  const answers = await inquirer.prompt([
     { type: 'input', name: 'rpcUrl', message: 'Enter the RPC URL:' },
     { type: 'password', name: 'privateKey', message: 'Enter your private key:' },
     { type: 'number', name: 'numTransactions', message: 'Number of transactions to send:' },
     { type: 'input', name: 'recipients', message: 'Comma-separated recipient addresses:' }
-  ]).then(answers => ({
-    ...answers,
+  ]);
+
+  return {
+    rpcUrl: answers.rpcUrl,
+    privateKey: answers.privateKey,
+    numTransactions: answers.numTransactions,
     recipients: answers.recipients.split(',').map(addr => addr.trim())
-  }));
+  };
 }
 
 async function sendTransactions(rpcUrl, privateKey, numTransactions, recipients) {
@@ -20,7 +25,7 @@ async function sendTransactions(rpcUrl, privateKey, numTransactions, recipients)
     const wallet = new ethers.Wallet(privateKey, provider);
 
     for (let i = 0; i < numTransactions; i++) {
-      const recipient = recipients[i % recipients.length]; // Loop recipients if fewer than txs
+      const recipient = recipients[i % recipients.length];
 
       const tx = await wallet.sendTransaction({
         to: recipient,
@@ -39,10 +44,14 @@ async function sendTransactions(rpcUrl, privateKey, numTransactions, recipients)
   }
 }
 
-// Run the script
 async function run() {
   const userInput = await getUserInput();
-  await sendTransactions(userInput.rpcUrl, userInput.privateKey, userInput.numTransactions, userInput.recipients);
+  await sendTransactions(
+    userInput.rpcUrl,
+    userInput.privateKey,
+    userInput.numTransactions,
+    userInput.recipients
+  );
 }
 
 run();
