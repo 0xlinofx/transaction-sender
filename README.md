@@ -1,3 +1,4 @@
+This script is designed to send multiple txs on the Tea Protocol
 # Download the script
 ```bash
 wget https://raw.githubusercontent.com/0xlinofx/transaction-sender/main/sendTransactions.js
